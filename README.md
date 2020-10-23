@@ -7,7 +7,10 @@
 [![saythanks](https://img.shields.io/badge/say-thanks-ff69b4.svg)](https://saythanks.io/to/moshvilla@yandex.com)
 
 ## What's that? 
-A temperature monitoring system based on raspberry pi, max31865 module, and pt100 temperature sensor
+A temperature monitoring system based on [raspberry pi 3](https://www.aliexpress.com/wholesale?SearchText=raspberry+pi+3b+plus) , [max31865](https://aliexpress.com/wholesale?SearchText=max31865) module, and [pt100](https://www.aliexpress.com/wholesale?SearchText=pt100%20temperature%20sensor) temperature sensor
+
+## Hardware setup
+Just follow this awesome guide https://www.mouser.com/datasheet/2/737/adafruit-max31865-rtd-pt100-amplifier-1396508.pdf
 
 ## How to use
 1. clone the repo
