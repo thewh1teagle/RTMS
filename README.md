@@ -1,4 +1,7 @@
 # RTMS
+
+<img src="https://user-images.githubusercontent.com/61390950/97031491-10a61000-1569-11eb-90ac-4984ca69e0cc.png" alt="alt text" width="60%" height="270px">
+
 ## What's that? 
 A temperature monitoring system based on raspberry pi, max31865, and pt100 sensor
 
