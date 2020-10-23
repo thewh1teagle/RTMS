@@ -1,0 +1,73 @@
+
+.container {
+    width: 100%;
+    
+}
+
+.wrapper {
+    display: grid;
+    grid-template-columns: 50% 50%;
+}
+
+.wrapper div {
+    
+}
+
+.add-title {
+    display: block;
+    text-align: center;
+}
+
+.save-recipient-btn {
+    display: block;
+    margin: auto;
+}
+
+.add-recipient-box {
+    text-align: center;
+}        
+
+.box-1 {
+    max-height: 100px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+.recipients-title {
+    display: block;
+    text-align: center;
+    margin-top: 5px;
+}
+
+.ul-recipients {
+    list-style-type: none;
+}
+
+.li-recipient {
+    display: block;
+    width: 100%;
+}
+
+.recipient-box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.mail-title {
+    display: block;
+    text-align: center;
+}
+.mail {
+    width: 50%;
+    background-color: white;
+    margin: 25px;
+    display: block;
+    float: right;
+    padding: 10px;
+}
+
+.box-3 {
+    margin-top: 20px;
+}
+
+

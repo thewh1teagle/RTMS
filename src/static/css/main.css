@@ -1,0 +1,23 @@
+
+body {
+    background: linear-gradient(90deg, rgba(42,40,71,1) 23%, rgba(2,0,36,1) 100%, rgba(176,176,189,1) 100%, rgba(0,212,255,1) 100%);
+    background: rgb(42,40,71);
+}
+#iframe-chart {
+    height: 400px;
+    width: 800px;
+    background: #FFFFFF;
+}
+
+.card {
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    color: white;
+}
+
+
+.page-wrapper {
+    display: flex;
+    background-color: red;
+}

@@ -1,0 +1,13 @@
+[Unit]
+Description=rpi monitor servie
+After=multi-user.target
+
+# Copy this file into /etc/systemd/system and run systemd enable name.service
+
+[Service]
+Type=idle
+WorkingDirectory=/home/pi
+ExecStart=/home/pi/venv/python3 app.py
+
+[Install]
+WantedBy=multi-user.target

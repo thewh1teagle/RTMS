@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+<script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    
+    <link rel="stylesheet" href="/static/css/mail.css">
+    <link rel="stylesheet" href="/static/css/main.css">
+
+    <title>RTMS</title>
+    
+</head>
+<body>
+
+    <div class="page_wrapper">
+
+        <div class="page-header">
+            <h1 style="color: #FFFFFF; text-align: center;">Raspberry pi temperature monitoring system</h1>      
+        </div>
+
+
+    
+        <div class="mail">
+            <span class="mail-title">Mail</span>
+            
+            <div class="container">
+                <input id="input-on-off" type="checkbox" checked data-on="Enabled" data-off="Disabled">
+                
+                <div class="wrapper">
+                    
+                    
+                    <div class="box-1">
+                        <span class="recipients-title">Recipients</span>
+                        <ul class="ul-recipients">
+                        <!--     
+                            <li class="li-recipient">
+                                <div class="recipient-box">
+                                    <span class="recipient-name">name</span>
+                                    <button class="remove-recipient-btn">remove</button>
+                                </div>
+                            </li> -->
+                        </ul>
+                    </div>
+                    <div class="box-2">
+                        <label class="switch">
+                    
+                        <span class="add-title">add recipient</span>
+                        <div class="add-recipient-box">
+                            <input type="text" class="input-recipient" placeholder="mail">
+                            <button class="add-recipient-btn">add</button>
+                        </div>
+                        
+                    </div>
+                    <div class="box-3">
+                        <span>Send when temperature is less than (Higher temperature)</span>
+                        <input id="min-temp" type="text" v-bind:placeholder="min_temp">
+                        <button id="change-min-temp-btn">Change</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <div style="overflow: hidden;" class="iframe-container">
+        <iframe scrolling="no" id="iframe-chart" src="/chart" title="Monitor"></iframe> 
+        </div>
+        <a href="/chart" class="btn btn-info">Open chart page</a>
+        
+
+    </div>
+    <script src="/static/js/mail.js"></script>
+</body>
+</html>
