@@ -135,6 +135,11 @@ def on_off():
     return 'ok'
 
 
+@app.route("/send_test_mail")
+def send():
+    notifier.test_message()
+    return "ok"
+
 @app.route('/recipients')
 def recipients():
     return recipients_handler(request.args)
@@ -152,5 +157,5 @@ def temp():
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=get_server_port(), debug=False)
+    app.run(host='0.0.0.0', port=get_server_port(), debug=True)
     

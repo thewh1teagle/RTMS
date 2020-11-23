@@ -77,6 +77,13 @@ refresh_recipients = async() => {
     
 }
 
+
+$(".btn-test-mail").click(function() {
+    fetch("/send_test_mail")
+})
+
+
+
 load_items = async () => {
     await refresh_min_temp()
     await refresh_recipients()

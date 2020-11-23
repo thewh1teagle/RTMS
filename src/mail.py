@@ -142,6 +142,17 @@ class Notifier(Gmail):
         recipients = self.get_recipients()
         self.send_mail(recipients, "test", "hello")
 
+    def test_message(self):
+        recipients = self.get_recipients()
+        try:
+            self.send_mail(recipients, "RTMS test message", f"""
+            Test is working
+            """)
+            self.update_last_sent_mail()
+        except Exception as e:
+            print(e)
+        
+
     def warning_message(self):
         recipients = self.get_recipients()
         try:
