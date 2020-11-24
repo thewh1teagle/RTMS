@@ -1,20 +1,36 @@
-import sqlite3
-from json import loads
-import configparser
-import os.path
-from datetime import datetime
-from loguru import logger
-from mail import Notifier
-# from grabber import Monitor
-from fake_grabber import FakeMonitor
 from flask import (
     Flask, 
     jsonify,
     render_template,
     request,
     send_from_directory,
-    g
+    g as flask_g
 )
+import socket
+import sqlite3
+from json import loads
+import configparser
+import os.path
+from datetime import datetime
+from loguru import logger
+from signal import signal, SIGINT
+from sys import exit
+from mail import Notifier
+import sys
+from time import sleep
+import logging
+# from grabber import Monitor
+from grabber import FakeMonitor
+
+
+
+app = Flask(__name__)
+cache = {}
+config_file = 'config.ini'
+DATABASE = 'db.sqlite' # db name
+
+
+
 
 
 def get_server_port():
@@ -23,30 +39,26 @@ def get_server_port():
     port = config['flask']['port']
     return port
 
+def get_server_local_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.connect(("8.8.8.8", 80))
+    return s.getsockname()[0]
 
 def get_db():
-    db = getattr(g, '_database', None)
+    db = getattr(flask_g, '_database', None)
     if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
+        db = flask_g._database = sqlite3.connect(DATABASE)
     return db
 
 
 
-app = Flask(__name__)
-app.app_context().push()
-DATABASE = 'db.sqlite' # db name
-conn = get_db()
-cur = conn.cursor()
-cur.execute('''CREATE TABLE IF NOT EXISTS temps
-            (temp REAL, date DATE)''')
-logger.info("Created db")
-cache = {}
-config_file = 'config.ini'
-config = configparser.ConfigParser()
-notifier = Notifier(config_file)
-# Monitor(port=get_server_port())
-FakeMonitor(-70, -75, port=get_server_port())
 
+def sigint_handler(signal_received, frame):
+    sys.stdout.write('\b\b\r')
+    monitor.stop()
+    notifier.stop()
+    logger.info('RTMS is stopping...')
+    exit(0)
 
 def set_min_temp_handler(args):
 
@@ -55,7 +67,6 @@ def set_min_temp_handler(args):
     return 'posted'
 
 def recipients_handler(request):
-    logger.info("handler")
     action = request['action']
     
     if action == 'add':
@@ -147,15 +158,44 @@ def recipients():
 
 @app.route('/temp')
 def temp():
-    return jsonify(
-        {
-        'temp': cache['temp'],
-        'time': cache['time']
-        }
-    )
-    
+    try:
+        return jsonify(
+            {
+            'temp': cache['temp'],
+            'time': cache['time']
+            }
+        )
+    except KeyError:
+        return jsonify(
+            {
+            'temp': 'error',
+            'time': 'error'
+            }
+        )
 
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=get_server_port(), debug=True)
+    app.app_context().push()
+    conn = get_db()
+    cur = conn.cursor()
+    cur.execute('''CREATE TABLE IF NOT EXISTS temps
+                (temp REAL, date DATE)''')
+    logger.info("Created db")
+
+    config = configparser.ConfigParser()
+    notifier = Notifier(config_file)
+    # Monitor(port=get_server_port())
+    monitor = FakeMonitor(-70, -75, port=get_server_port())
+
+    
+    log = logging.getLogger('werkzeug')
+    log.setLevel(logging.ERROR)
+    signal(SIGINT, sigint_handler)
+
+    
+    local_ip = socket.gethostbyname(
+        socket.gethostname()
+    )
+    logger.info(f"App running on http://{get_server_local_ip()}:{get_server_port()}")
+    app.run(host='0.0.0.0', port=get_server_port(), debug=False)
     

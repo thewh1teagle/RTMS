@@ -8,9 +8,9 @@ import threading
 import smtplib
 from email.mime.text import MIMEText
 from gmail import Gmail
+from threading import Thread
 
-
-class Notifier(Gmail):
+class Notifier(Gmail, Thread):
     def __init__(self, config_file):
         config = configparser.ConfigParser()
         config.read(config_file)
@@ -20,6 +20,7 @@ class Notifier(Gmail):
 
 
     def setup(self, config_file):
+        self.running_switch = True
         self.config_file = config_file
         config = configparser.ConfigParser()
         config.read(config_file)
@@ -31,7 +32,9 @@ class Notifier(Gmail):
         self.minutes_between_every_mail = int(config['mail']['minutes_between_every_mail'])
         self.last_mail = datetime.now() - timedelta(hours=self.hours_between_every_mail, minutes=self.minutes_between_every_mail)
         self.DATABASE = config['flask']['sqlite_db_name']
-        super().__init__(gmail_user, gmail_password)
+        Gmail.__init__(self, gmail_user, gmail_password)
+        self.start_stop = True
+        Thread.__init__(self)
         if int(self.enabled):
             self.start()
 
@@ -174,15 +177,15 @@ class Notifier(Gmail):
         self.enabled = False
         self.update_key_values(self.config_file, "mail", "enabled", "0")
 
-    def start(self):
-        if self.running:
-            print("already running")
-        else:
-            print("starting notifier")
-            thread = threading.Thread(target=self.run)
-            thread.start()
-            self.start_stop = True
-            self.running = True
+    # def start(self):
+    #     if self.running:
+    #         print("already running")
+    #     else:
+    #         print("starting notifier")
+    #         thread = threading.Thread(target=self.run)
+    #         thread.start()
+    #         self.start_stop = True
+    #         self.running = True
 
     def stop(self):
         print("stop notifier")
@@ -198,7 +201,7 @@ class Notifier(Gmail):
         logger.info("Notifier started...")
         looks_good = self.looks_good()
 
-        while True:
+        while self.running_switch:
             if self.start_stop:
                 if not looks_good and self.allowed_to_send_mail():
                     self.warning_message()
@@ -206,6 +209,10 @@ class Notifier(Gmail):
             else:
                 print("Shutting down notifier")
                 break
+
+    def stop(self):
+        self.running_switch = False
+
 
 if __name__ == '__main__':
     Notifier("config.ini")
